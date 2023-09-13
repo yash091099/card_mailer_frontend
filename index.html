@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./animation.css">
+    <title>Isahayog NGO</title>
+  
+   
+</head>
+<body>
+   <!-- Snowflakes -->
+   <div class="snowflakes" aria-hidden="true">
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❆
+    </div>
+    <div class="snowflake">
+        ❄
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❆
+    </div>
+    <div class="snowflake">
+        ❄
+    </div>
+    <div class="snowflake">
+        ❅
+    </div>
+    <div class="snowflake">
+        ❆
+    </div>
+    <div class="snowflake">
+        ❄
+    </div>
+</div>
+
+<form id="awesomeForm">
+    <span style="color: #ffff; text-align: center;font-weight: 1000;">Isahayog NGO</span>
+    <span style="color: #ffff; text-align: center; font-weight:600;">Digital Card Details</span>
+    <div>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" required>
+        <span class="error" id="firstNameError"></span>
+    </div>
+    <div>
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" required>
+        <span class="error" id="lastNameError"></span>
+    </div>
+
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+        <span class="error" id="emailError"></span>
+    </div>
+    <div>
+        <label for="mobile">Mobile:</label>
+        <input type="tel" id="mobile" required>
+        <span class="error" id="mobileError"></span>
+    </div>
+    <div>
+        <label for="address">Address:</label>
+        <textarea maxlength="200" style="resize:none" id="address" rows="4" required></textarea>
+        <span class="error" id="addressError"></span>
+    </div>
+
+    <button type="button" id="generateCardButton" class="button"><span>Generate Card </span></button>
+</form>
+
+
+<!-- Modal for displaying the generated card -->
+<div id="cardDisplayModal" class="modal hide card-modal">
+    <div class="modal-content">
+        <span class="close close-card">&times;</span> <!-- Added the close-card class -->
+        <!-- Replace this with the generated card UI -->
+        <div class="card">
+            <h1><span id="cardFirstName"></span></h1>
+            <!-- <p>Last Name: <span id="cardLastName"></span></p> -->
+            <p>Email: <span id="cardEmail"></span></p>
+            <p>Mobile: <span id="cardMobile"></span></p>
+            <p>Address: <span id="cardAddress"></span></p>
+        </div>
+    <button type="button" id="sendCardByEmailButton" class="button" ><span>Send Card via Gmail </span></button>
+
+    </div>
+</div>
+<div class="overlay hide"></div> 
+<div id="loader" class="loader"></div>
+
+     <script>
+        // JavaScript (script.js)
+        const form = document.getElementById('awesomeForm');
+        const generateCardButton = document.getElementById('generateCardButton');
+        const sendCardButton = document.getElementById('sendCardButton');
+        const emailModal = document.getElementById('emailModal');
+        const sendEmailButton = document.getElementById('sendEmailButton');
+        const mobileField = document.getElementById('mobile');
+        const overlay = document.querySelector('.overlay');
+        const emailPromptError = document.getElementById('emailPromptError');
+        const cardDisplayModal = document.getElementById('cardDisplayModal');
+        const sendCardByEmailButton = document.getElementById('sendCardByEmailButton');
+        const cardFirstName = document.getElementById('cardFirstName');
+        const cardLastName = document.getElementById('cardLastName');
+        const cardEmail = document.getElementById('cardEmail');
+        const cardMobile = document.getElementById('cardMobile');
+        const cardAddress = document.getElementById('cardAddress');
+
+
+
+    // Function to show the loader
+    function showLoader() {
+        const loader = document.getElementById('loader');
+        loader.style.display = 'block';
+    }
+
+    // Function to hide the loader
+    function hideLoader() {
+        const loader = document.getElementById('loader');
+        loader.style.display = 'none';
+    }
+
+
+        function openEmailModal() {
+    emailModal.classList.remove('hide');
+    overlay.style.display = 'block'; // Show the overlay
+}
+
+// Function to close the email modal
+function closeEmailModal() {
+    emailModal.classList.add('hide');
+    overlay.style.display = 'none'; // Hide the overlay
+}
+
+// Function to open the card display modal
+function openCardDisplayModal() {
+    cardDisplayModal.classList.remove('hide');
+    overlay.style.display = 'block'; // Show the overlay
+}
+
+// Function to close the card display modal
+function closeCardDisplayModal() {
+    cardDisplayModal.classList.add('hide');
+    overlay.style.display = 'none'; // Hide the overlay
+}
+    
+
+        generateCardButton.addEventListener('click', () => {
+            clearErrors();
+
+            if (form.checkValidity()) {
+                // Populate the card display modal with form data
+                cardFirstName.textContent = document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value;
+                cardEmail.textContent = document.getElementById('email').value;
+                cardMobile.textContent = document.getElementById('mobile').value;
+                cardAddress.textContent = document.getElementById('address').value;
+                openCardDisplayModal();
+            } else {
+                displayFieldErrors();
+            }
+        });
+
+
+        function clearErrors() {
+            const errorElements = document.querySelectorAll('.error');
+            errorElements.forEach((error) => {
+                error.textContent = '';
+            });
+        }
+
+        function displayFieldErrors() {
+            const invalidFields = form.querySelectorAll(':invalid');
+            invalidFields.forEach((field) => {
+                const fieldName = field.getAttribute('id');
+                const errorElement = document.getElementById(`${fieldName}Error`);
+                errorElement.textContent = field.validationMessage;
+            });
+        }
+
+        // Real-time error message update on input
+        form.addEventListener('input', (event) => {
+            const inputField = event.target;
+            const errorElement = document.getElementById(`${inputField.id}Error`);
+            errorElement.textContent = inputField.validationMessage;
+        });
+
+        // ...
+
+        // Mobile number validation (allow only numeric characters)
+        mobileField.addEventListener('input', () => {
+            const mobileValue = mobileField.value;
+            const numericMobile = mobileValue.replace(/[^\d]/g, ''); // Remove non-numeric characters
+            mobileField.value =  numericMobile.slice(0, 10); // Allow only the first 10 numeric characters
+        });
+
+        function resetForm() {
+    form.reset(); // Reset the form to its initial state
+    clearErrors(); // Clear any error messages
+}
+
+ sendCardByEmailButton.addEventListener('click', async () => {
+        // Open the email modal from the card modal
+        const cardReceiverEmail = prompt('Enter Card Receiver\'s Email:');
+        if (cardReceiverEmail !== null) {
+            // Check if the entered email is valid
+            if (validateEmail(cardReceiverEmail)) {
+                // Show the loader before making the API call
+                showLoader();
+
+                // Make an API call to send the card data
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const email = document.getElementById('email').value;
+                const mobile = document.getElementById('mobile').value;
+                const address = document.getElementById('address').value;
+                const sender = cardReceiverEmail;
+
+                try {
+                    const response = await fetch('http://localhost:3000/sendCard', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ firstName, lastName, email, mobile, address, sender }),
+                    });
+
+                    if (response.ok) {
+                        setTimeout(() => {
+                            alert('Email sent successfully!');
+                            closeCardDisplayModal();
+                            resetForm(); // Reset the form
+                            window.scrollTo(0, 0); // Scroll to the top of the page
+                        }, 100);
+                    } else {
+                        alert('Error sending card data to the server.');
+                    }
+                } catch (error) {
+                    console.error('API call error:', error);
+                    alert('An error occurred while sending the email.');
+                } finally {
+                    // Hide the loader after the API call is complete
+
+                        hideLoader();
+                }
+            } else {
+                alert('Enter a valid Email!');
+            }
+        }
+        console.log('send card button clicked');
+    });
+
+      
+        // Function to validate an email address
+        function validateEmail(email) {
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            return emailPattern.test(email);
+        }
+
+    
+
+        // Event listeners for close buttons
+        document.querySelector('.close-card').addEventListener('click', closeCardDisplayModal);
+    </script>
+</body>
+</html>
